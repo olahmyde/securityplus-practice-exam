@@ -12,12 +12,13 @@ def clean_page(t):
     lines = t.split('\n')
     out = []
     for l in lines:
-        if re.fullmatch(r'\d{1,3}', l.strip()) or re.fullmatch(r'Practice Exam [ABC] - Answers', l.strip()):
+        if re.fullmatch(r'\d{1,3}', l.strip()) or re.fullmatch(r'(\d{1,3} )?Practice Exam [ABC] - Answers( \d{1,3})?', l.strip()):
             continue
         out.append(l)
     return '\n'.join(out)
 
 def norm(s):
+    s = re.sub(r'(^|\n)`', r'\1', s)  # exhibit marker only matters in the question stem
     s = re.sub(r'\s+', ' ', s).strip()
     return s
 
@@ -49,7 +50,8 @@ def take_options(lines, opts, skip=()):
 def fmt_stem(stem):
     out = []
     for l in stem.split('\n'):
-        pre = re.search(r'\S {3,}\S|\S {3,}$|->', l)
+        pre = l.startswith('`') or re.search(r'\S {3,}\S|\S {3,}$|->', l)
+        l = l[1:] if l.startswith('`') else l
         l2 = l.rstrip()
         if pre or (out and out[-1].startswith('\x00')):
             pass
@@ -101,7 +103,7 @@ for ex, (a, b) in RANGES.items():
         inc = re.split(r'\nThe incorrect answers?:\n', main, 1)
         ans_block, inc_block = inc[0], (inc[1] if len(inc) > 1 else '')
         letters = KEY.get(f'{ex}{num}') or re.findall(r'\b([A-H])\.\s', ans_block.split('\n')[0])
-        cop = compact(''.join(opts[L] for L in letters))
+        cop = compact(re.sub(r'\band\b', '', ''.join(opts[L] for L in letters)))
         lines = ans_block.strip().split('\n')
         i = 0
         while i < len(lines):
