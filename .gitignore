@@ -1,0 +1,7 @@
+# The book's questions: generated locally from your own PDF, never committed
+data.js
+pbq.js
+*.pdf
+.hallmark/
+.DS_Store
+__pycache__/
