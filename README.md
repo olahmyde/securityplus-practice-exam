@@ -2,6 +2,8 @@
 
 A local study site for the CompTIA Security+ SY0-701 exam. It runs from `index.html` with no server and no install.
 
+![The landing page: what the exam is, how it's scored, where to buy a voucher and when to book](docs/screenshots/landing.png)
+
 - **Exams A, B and C:** 90 questions each, performance-based questions (PBQs) first, the way the real exam opens.
 - **Mixed:** 30 questions from each exam, drawn fresh every time you start.
 - **Study or exam mode:** check each answer as you go, or work against a 90-minute clock and review at the end.
@@ -11,6 +13,36 @@ A local study site for the CompTIA Security+ SY0-701 exam. It runs from `index.h
 - **Ports flashcards:** 41 ports and protocols, VoIP included.
 
 Progress is saved in your browser's localStorage.
+
+## Screenshots
+
+The screenshots use sample questions written for this README. The book's questions are not shown.
+
+**Pick a set, and see your numbers across every attempt**
+
+![Practice page with the four sets, overall accuracy, right and wrong counts, and past attempts with pass, nearly-there and not-yet labels](docs/screenshots/practice.png)
+
+**Drag-and-drop PBQs, then the marked result with a note on each box**
+
+| Answering | Checked |
+| --- | --- |
+| ![A PBQ with a bank of port numbers to drag onto protocols](docs/screenshots/pbq-live.png) | ![The same PBQ after checking: three right in green, one wrong in red with the right port shown](docs/screenshots/pbq.png) |
+
+**Multiple choice, with the reason behind every option**
+
+![A select-two question after checking, with right answers in green, the wrong pick in red, and a reason under each option](docs/screenshots/mcq.png)
+
+**Results: pass ribbon at 90%, nearly there from 75%**
+
+| Pass | Nearly there |
+| --- | --- |
+| ![Results at 100% with a gold pass ribbon](docs/screenshots/pass.png) | ![Results at 89% with a ring gauge and the weakest domain named](docs/screenshots/results.png) |
+
+**Ports flashcards, and it works on a phone**
+
+| Flashcards | Phone |
+| --- | --- |
+| ![A ports flashcard showing a port number to name](docs/screenshots/ports.png) | ![A question on a phone screen with the live right and wrong count in the top bar](docs/screenshots/mobile.png) |
 
 ## Building the question data
 

@@ -279,7 +279,7 @@ a:hover { color: var(--color-accent); }
 .bar__nav a:hover { color: var(--color-ink); background: var(--color-paper-2); }
 .bar__nav a[aria-current="page"] { color: var(--color-ink); background: var(--color-paper-2); box-shadow: inset 0 -2px 0 var(--color-accent); }
 .bar__nav a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.tally { font-size: var(--text-sm); color: var(--color-muted); }
+.tally { font-size: var(--text-sm); color: var(--color-muted); white-space: nowrap; }
 .tally__ok { color: var(--color-ok); } .tally__bad { color: var(--color-bad); } .tally__pct { color: var(--color-ink); margin-left: var(--space-2xs); }
 
 /* tiers */
@@ -412,6 +412,10 @@ a:hover { color: var(--color-accent); }
   .home__head h1 { font-size: var(--text-2xl); }
   .bar__nav { margin-left: 0; }
   .wordmark__long { display: none; }
+  .bar__in { flex-wrap: wrap; row-gap: 0; }
+  .bar__tools { margin-left: 0; width: 100%; justify-content: space-between; gap: var(--space-sm); }
+  .bar__tools:empty { display: none; }
+  .bar { position: static; }
   .bar__in { gap: var(--space-xs); }
   .bar__nav a { padding: 0 var(--space-xs); }
   .wordmark { font-size: var(--text-sm); }

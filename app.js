@@ -728,7 +728,7 @@ function renderResults(s) {
             </div>
             <div class="badge badge--${T.key}">${T.key === "pass" ? rosette() : T.key === "near" ? `<svg class="badge__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="badge__track"/><circle cx="60" cy="60" r="50" class="badge__fill" style="--v:${score}"/></svg>` : `<svg class="badge__book" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 30 Q40 22 60 32 Q80 22 100 30 V92 Q80 84 60 94 Q40 84 20 92 Z"/><path d="M60 32 V94"/></svg>`}</div>
           </div>
-          <p class="tier-line"><span class="tier tier--${T.key}">${T.name}</span> ${T.line}${T.key !== "pass" && weakest ? ` Weakest: <strong>${weakest}</strong>.` : ""}</p>
+          <p class="tier-line"><span class="tier tier--${T.key}">${T.name}</span> <span>${T.line}${T.key !== "pass" && weakest ? ` Weakest: <strong>${weakest}</strong>.` : ""}</span></p>
           <div class="split" role="img" aria-label="${full} right and ${rows.length - full} wrong"><span class="split__ok" style="--v:${full / rows.length}"></span></div>
           <p class="muted"><span class="measured tally__ok">${full}</span> right, <span class="measured tally__bad">${rows.length - full}</span> wrong, in <span class="measured">${fmtTime(s.elapsed)}</span>. The score gives PBQs partial credit. Pass mark here is 90%, nearly there from 75%.</p>
           <div class="score__go">
