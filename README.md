@@ -9,7 +9,7 @@ A local study site for the CompTIA Security+ SY0-701 exam. It runs from `index.h
 - **Study or exam mode:** check each answer as you go, or work against a 90-minute clock and review at the end.
 - **Every option explained:** why the right answer is right, why each wrong one is wrong, and a link to the objective's video.
 - **Drag-and-drop PBQs:** drag, or tap a choice and then tap a box. There's also a firewall-rule table.
-- **Scores:** 90% and up is a pass, 75 to 89% is nearly there, and below 75% means read more. You also get a breakdown by domain, right and wrong totals across all attempts, and a retry of the questions you missed.
+- **Scores:** tiers follow Professor Messer's scoring chart. 100% is **Wizard** (try a Mixed set to prove it isn't memory), 90% and up is **Exceptional** (ready to book), 80 to 89% is a **Strong showing**, 70 to 79% is **So close**, and below 70% is **Not yet**. You also get a breakdown by domain, right and wrong totals across all attempts, and a retry of the questions you missed.
 - **Ports flashcards:** 41 ports and protocols, VoIP included.
 
 Progress is saved in your browser's localStorage.
@@ -20,7 +20,7 @@ The screenshots use sample questions written for this README. The book's questio
 
 **Pick a set, and see your numbers across every attempt**
 
-![Practice page with the four sets, overall accuracy, right and wrong counts, and past attempts with pass, nearly-there and not-yet labels](docs/screenshots/practice.png)
+![Practice page with the four sets, overall accuracy, right and wrong counts, and past attempts labelled by tier](docs/screenshots/practice.png)
 
 **Drag-and-drop PBQs, then the marked result with a note on each box**
 
@@ -32,11 +32,11 @@ The screenshots use sample questions written for this README. The book's questio
 
 ![A select-two question after checking, with right answers in green, the wrong pick in red, and a reason under each option](docs/screenshots/mcq.png)
 
-**Results: pass ribbon at 90%, nearly there from 75%**
+**Results: a star ribbon for a perfect score, a ribbon from 90%, a gauge below that**
 
-| Pass | Nearly there |
+| Wizard | Strong showing |
 | --- | --- |
-| ![Results at 100% with a gold pass ribbon](docs/screenshots/pass.png) | ![Results at 89% with a ring gauge and the weakest domain named](docs/screenshots/results.png) |
+| ![Results at 100%: Wizard, a ribbon with a star, and a button to try a Mixed set](docs/screenshots/pass.png) | ![Results at 89%: Strong showing, a ring gauge and the weakest domain named](docs/screenshots/results.png) |
 
 **Ports flashcards, and it works on a phone**
 

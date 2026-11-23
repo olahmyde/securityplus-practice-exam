@@ -113,14 +113,17 @@ const icon = {
   bad: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
 };
 
-// ---------- tiers: 90%+ pass, 75%+ nearly there, below that read more ----------
-const TIERS = [
-  { min: 0.9, key: "pass", name: "Pass", line: "You're ready. Book the real exam." },
-  { min: 0.75, key: "near", name: "Nearly there", line: "Good try. Close the gaps below and go again." },
-  { min: 0, key: "fail", name: "Not yet", line: "Read more on the weak domains below, then retry the ones you missed." },
+// ---------- tiers (see TIERS below) ----------
+const TIERS = [ // Professor Messer's scoring chart, plus Wizard for a perfect score
+  { min: 1, key: "wizard", name: "Wizard", line: "A perfect run. You've probably seen these before. Try a Mixed set to check it isn't memory." },
+  { min: 0.9, key: "pass", name: "Exceptional", line: "You're ready for the real thing. Book the exam." },
+  { min: 0.8, key: "strong", name: "Strong showing", line: "85% and up can reasonably count as a pass. A bit more study earns real points." },
+  { min: 0.7, key: "close", name: "So close", line: "Keep working on what you missed and fill those gaps." },
+  { min: 0, key: "fail", name: "Not yet", line: "Use the objective link on each missed question to find where you need more help." },
 ];
+const READY = (score) => score >= 0.9;
 const tierOf = (score) => TIERS.find((t) => score >= t.min);
-function rosette() {
+function rosette(star) {
   // an original award rosette: 24-point scalloped disc, inner seal, two tails
   const pts = [];
   for (let i = 0; i < 48; i++) { const r = i % 2 ? 54 : 62, a = (i / 48) * Math.PI * 2; pts.push(`${(70 + r * Math.sin(a)).toFixed(1)},${(66 - r * Math.cos(a)).toFixed(1)}`); }
@@ -130,7 +133,7 @@ function rosette() {
     <polygon class="rosette__edge" points="${pts.join(" ")}"/>
     <circle class="rosette__seal" cx="70" cy="66" r="42"/>
     <circle class="rosette__ring" cx="70" cy="66" r="35"/>
-    <path class="rosette__tick" d="M52 67 l12 12 l24 -26"/>
+    ${star ? `<path class="rosette__star" d="M70 40 l7.6 15.4 17 2.5 -12.3 12 2.9 16.9 -15.2 -8 -15.2 8 2.9 -16.9 -12.3 -12 17 -2.5z"/>` : `<path class="rosette__tick" d="M52 67 l12 12 l24 -26"/>`}
   </svg>`;
 }
 const confetti = () => `<div class="confetti" aria-hidden="true">${Array.from({ length: 24 }, (_, i) => `<i style="--x:${(Math.random() * 2 - 1).toFixed(2)};--d:${(Math.random() * 0.4).toFixed(2)}s;--r:${Math.round(Math.random() * 360)}deg" class="c${i % 3}"></i>`).join("")}</div>`;
@@ -223,11 +226,13 @@ function renderLanding() {
       <div class="tiers-key">
         <h3>How your score reads</h3>
         <ul role="list">
-          <li><span class="tier tier--pass">Pass</span><span class="measured">90% and up</span><span>Ready to book.</span></li>
-          <li><span class="tier tier--near">Nearly there</span><span class="measured">75 to 89%</span><span>Good try. Close the gaps and go again.</span></li>
-          <li><span class="tier tier--fail">Not yet</span><span class="measured">below 75%</span><span>Read more on your weakest domains.</span></li>
+          <li><span class="tier tier--wizard">Wizard</span><span class="measured">100%</span><span>Perfect. Try a Mixed set to prove it isn't memory.</span></li>
+          <li><span class="tier tier--pass">Exceptional</span><span class="measured">90% and up</span><span>Ready for the real exam. Book it.</span></li>
+          <li><span class="tier tier--strong">Strong showing</span><span class="measured">80 to 89%</span><span>85% and up can reasonably count as a pass.</span></li>
+          <li><span class="tier tier--close">So close</span><span class="measured">70 to 79%</span><span>Keep working on the areas you miss.</span></li>
+          <li><span class="tier tier--fail">Not yet</span><span class="measured">below 70%</span><span>Use each objective link to find the gaps.</span></li>
         </ul>
-        <p class="muted small">CompTIA doesn't publish how its scaled score maps to a percentage, so treat these as readiness marks, not a prediction.</p>
+        <p class="muted small">These follow Professor Messer's scoring chart. CompTIA doesn't publish how its scaled score maps to a percentage, so treat them as readiness marks, not a prediction.</p>
       </div>
     </section>
 
@@ -246,9 +251,9 @@ function renderLanding() {
         <p>Book when your practice scores say so, not when the calendar does.</p></div>
       <div class="exam-grid">
         <ul class="facts" role="list">
-          <li><strong>Over 90% on these practice exams:</strong> you're ready for the real one.</li>
-          <li><strong>80 to 90%:</strong> a strong showing. A little more study earns real points.</li>
-          <li><strong>Below that:</strong> use each missed question's objective link to find the gaps.</li>
+          <li><strong>90% or more on these practice exams:</strong> you're ready for the real one.</li>
+          <li><strong>80 to 89%:</strong> a strong showing, and 85% can reasonably count as a pass. A little more study earns real points.</li>
+          <li><strong>70 to 79%:</strong> so close. Below 70%, use each missed question's objective link to find the gaps.</li>
           <li><strong>Not confident?</strong> Wait a few days and take more practice sets. Aim to understand why, not to memorise the key.</li>
         </ul>
         <div>
@@ -300,7 +305,7 @@ function renderHome() {
   const hist = store.history.slice(0, 12);
   const H = store.history;
   const right = H.reduce((m, h) => m + h.full, 0), seen = H.reduce((m, h) => m + h.total, 0);
-  const passes = H.filter((h) => tierOf(h.score).key === "pass").length;
+  const passes = H.filter((h) => READY(h.score)).length;
   const stats = H.length ? `
     <section class="stats" aria-labelledby="stats-h">
       <h2 id="stats-h">Your numbers so far</h2>
@@ -309,7 +314,7 @@ function renderHome() {
         <div><p class="stats__k">Right</p><p class="stats__v measured stats__v--ok">${right}</p></div>
         <div><p class="stats__k">Wrong</p><p class="stats__v measured stats__v--bad">${seen - right}</p></div>
         <div><p class="stats__k">Sets finished</p><p class="stats__v measured">${H.length}</p></div>
-        <div><p class="stats__k">Passes at 90%</p><p class="stats__v measured">${passes}</p></div>
+        <div><p class="stats__k">Ready (90%+)</p><p class="stats__v measured">${passes}</p></div>
       </div>
       <div class="split" role="img" aria-label="${right} right and ${seen - right} wrong out of ${seen} questions"><span class="split__ok" style="--v:${right / seen}"></span></div>
       <p class="muted small">Across every finished set. A PBQ only counts as right when every box is right.</p>
@@ -720,18 +725,19 @@ function renderResults(s) {
     <section class="results">
       <div class="panels score">
         <div class="score__lead verdict-box verdict-box--${T.key} ${fresh ? "is-fresh" : ""}">
-          ${T.key === "pass" && fresh ? confetti() : ""}
+          ${READY(score) && fresh ? confetti() : ""}
           <div class="verdict-box__top">
             <div>
               <h1>${SETS[s.set].name}, ${s.mode === "exam" ? "exam mode" : "study mode"}</h1>
               <p class="reading">${pct(score)}%</p>
             </div>
-            <div class="badge badge--${T.key}">${T.key === "pass" ? rosette() : T.key === "near" ? `<svg class="badge__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="badge__track"/><circle cx="60" cy="60" r="50" class="badge__fill" style="--v:${score}"/></svg>` : `<svg class="badge__book" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 30 Q40 22 60 32 Q80 22 100 30 V92 Q80 84 60 94 Q40 84 20 92 Z"/><path d="M60 32 V94"/></svg>`}</div>
+            <div class="badge badge--${T.key}">${READY(score) ? rosette(T.key === "wizard") : T.key !== "fail" ? `<svg class="badge__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" class="badge__track"/><circle cx="60" cy="60" r="50" class="badge__fill" style="--v:${score}"/></svg>` : `<svg class="badge__book" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 30 Q40 22 60 32 Q80 22 100 30 V92 Q80 84 60 94 Q40 84 20 92 Z"/><path d="M60 32 V94"/></svg>`}</div>
           </div>
-          <p class="tier-line"><span class="tier tier--${T.key}">${T.name}</span> <span>${T.line}${T.key !== "pass" && weakest ? ` Weakest: <strong>${weakest}</strong>.` : ""}</span></p>
+          <p class="tier-line"><span class="tier tier--${T.key}">${T.name}</span> <span>${T.line}${!READY(score) && weakest ? ` Weakest: <strong>${weakest}</strong>.` : ""}</span></p>
           <div class="split" role="img" aria-label="${full} right and ${rows.length - full} wrong"><span class="split__ok" style="--v:${full / rows.length}"></span></div>
-          <p class="muted"><span class="measured tally__ok">${full}</span> right, <span class="measured tally__bad">${rows.length - full}</span> wrong, in <span class="measured">${fmtTime(s.elapsed)}</span>. The score gives PBQs partial credit. Pass mark here is 90%, nearly there from 75%.</p>
+          <p class="muted"><span class="measured tally__ok">${full}</span> right, <span class="measured tally__bad">${rows.length - full}</span> wrong, in <span class="measured">${fmtTime(s.elapsed)}</span>. The score gives PBQs partial credit. 90% or more means ready to book.</p>
           <div class="score__go">
+            ${T.key === "wizard" ? `<button class="btn btn--primary" data-act="mixed">${s.set === "M" ? "Try another Mixed set" : "Try a Mixed set instead"}</button>` : ""}
             ${missed.length ? `<button class="btn btn--primary" data-act="retry">Retry the ${missed.length} missed</button>` : ""}
             <button class="btn" data-act="again">${s.set === "M" ? "New mixed set" : "Take it again"}</button>
             <a class="btn btn--quiet" href="#/practice">All sets</a>
@@ -765,6 +771,7 @@ function renderResults(s) {
     const r = e.target.closest("[data-review]"); if (r) { s.reviewing = true; save(); return; }
     const b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "retry") { const ids = missed.map((m) => m.q.id); newSession("R", s.mode, [...ids.filter((id) => Q[id].type === "pbq"), ...shuffle(ids.filter((id) => Q[id].type !== "pbq"))]); location.hash = "#/quiz/R/1"; }
+    if (b.dataset.act === "mixed") { newSession("M", s.mode); location.hash = "#/quiz/M/1"; return; }
     if (b.dataset.act === "again") { newSession(s.set, s.mode); location.hash = `#/quiz/${s.set}/1`; }
   };
   app.onchange = null; document.onkeydown = null; app.ondrop = app.ondragstart = app.ondragover = app.ondragleave = app.ondragend = null;
